@@ -1,0 +1,75 @@
+﻿@page "/"
+@using System
+
+<h3>Rock, Paper, Scissors</h3>
+
+@if (showResult)
+{
+    <p>Your Choice: @playerChoice</p>
+    <p>Computer's Choice: @computerChoice</p>
+    <p>@resultMessage</p>
+    <button class="btn btn-primary" @onclick="ResetGame">Play Again</button>
+}
+else
+{
+    <p>Choose your move:</p>
+    <button class="btn btn-primary" @onclick='() => PlayGame(" rock")'>Rock</button>
+    <button class="btn btn-primary" @onclick='() => PlayGame(" paper")'>Paper</button>
+    <button class="btn btn-primary" @onclick='() => PlayGame(" scissors")'>Scissors</button>
+}
+
+@code {
+    private string playerChoice;
+    private string computerChoice;
+    private bool showResult;
+    private string resultMessage;
+
+    private void PlayGame(string choice)
+    {
+        playerChoice = choice;
+        Random random = new Random();
+        int randomNumber = random.Next(1, 4);
+
+        switch (randomNumber)
+        {
+            case 1:
+                computerChoice = "rock";
+                break;
+            case 2:
+                computerChoice = "paper";
+                break;
+            case 3:
+                computerChoice = "scissors";
+                break;
+        }
+
+        DetermineWinner();
+        showResult = true;
+    }
+
+    private void DetermineWinner()
+    {
+        if (playerChoice == computerChoice)
+        {
+            resultMessage = "It's a tie!";
+        }
+        else if ((playerChoice == "rock" && computerChoice == "scissors") ||
+                 (playerChoice == "paper" && computerChoice == "rock") ||
+                 (playerChoice == "scissors" && computerChoice == "paper"))
+        {
+            resultMessage = "Congratulations! You win!";
+        }
+        else
+        {
+            resultMessage = "Sorry, you lose!";
+        }
+    }
+
+    private void ResetGame()
+    {
+        playerChoice = string.Empty;
+        computerChoice = string.Empty;
+        resultMessage = string.Empty;
+        showResult = false;
+    }
+}
